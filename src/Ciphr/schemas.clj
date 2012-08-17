@@ -1,5 +1,16 @@
 (ns Ciphr.schemas)
 
+(def alphabet "abcdefghijklmnopqrstuvwxyz")
+
+(defn add-non-letters [schema]
+	(into {\space \space} schema))
+
+(defn skew [text steps]
+	(subs text steps))
+
+(defn caesar-schema [steps]
+	(add-non-letters (into {} (map (fn [a b] [a b]) alphabet (skew alphabet steps)))))
+
 (def schema-1 {
 	\a \b
 	\b \c

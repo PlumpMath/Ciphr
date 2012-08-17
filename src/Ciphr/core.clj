@@ -4,6 +4,6 @@
 		[Ciphr.schemas]))
 
 (defn -main [& args]
-	(assert (not (nil? (first args))) "Must supply a command line argument")
-	(println (Ciphr.basics/substitute (first args) Ciphr.schemas/schema-1)))
+	;(assert (not (nil? (first args))) "Must supply a command line argument")
+	(println (Ciphr.basics/substitute (first args) (Ciphr.schemas/caesar-schema 3))))
 

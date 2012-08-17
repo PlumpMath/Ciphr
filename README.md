@@ -4,7 +4,7 @@ A Clojure library designed to decipher stuff
 
 ## Usage
 
-Don't know yet...
+Don't know yet... cracking diaries?
 
 ## License
 
