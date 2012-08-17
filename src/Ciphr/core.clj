@@ -1,6 +1,6 @@
-(ns Ciphr.core)
+(ns Ciphr.core
+	(:require [Ciphr.basics]))
 
-(defn -main
-  "I don't do a whole lot."
-  [& args]
-  (println "Hello, World!"))
+(defn -main [& args]
+	(assert (not (nil? (first args))))
+	(println (Ciphr.basics/substitution (first args))))
