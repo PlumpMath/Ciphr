@@ -13,6 +13,9 @@
 	(clojure.string/join (map (partial get-char schema) text)))
 
 (defn -main [& args]
-	;(assert (not (nil? (first args))) "Must supply a command line argument")
-	(println (substitute (first args) (Ciphr.schemas/caesar-schema 3))))
+	(let [flag (first args)]
+		(cond 
+			(= flag "-encrypt") 
+				(println (substitute (second args) (Ciphr.schemas/caesar-schema (Integer/parseInt (nth args 2)))))
+			:else (println "Please supply a argument: \n -encrypt [string] [steps]"))))
 
