@@ -1,7 +1,10 @@
 (ns Ciphr.core-test
-  (:use clojure.test
-        Ciphr.core))
+  (:use clojure.test)
+  (:require
+		[Ciphr.schemas]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest generate-schema
+	(let [schema (Ciphr.schemas/caesar-schema 1)]
+  		(is (= (val (find schema \a)) \b))
+  		(is (= (val (find schema \z)) \a))
+  		(is (= (val (find schema \space)) \space))))
