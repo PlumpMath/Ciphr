@@ -1,12 +1,19 @@
 (ns Ciphr.schemas)
 
 (def normal-alphabet "abcdefghijklmnopqrstuvwxyz")
+(def sorted-alphabet "etaoinshrdlcumwfgypbvkjxqz")
 
 (defn add-non-letters [schema]
-	(into {\space \space \. \. \, \,} schema))
+	(into {
+		\space \space, 
+		\. \., 
+		\, \,, 
+		\n \n, 
+		\t \t} schema))
 
 (defn skew [text steps]
-	(str (subs text steps) (subs text 0 steps)))
+  (let [t (mod steps (count text))]
+	(str (subs text t) (subs text 0 t))))
 
 (defn caesar-schema 
 	([steps]
