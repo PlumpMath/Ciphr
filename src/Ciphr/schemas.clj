@@ -6,10 +6,11 @@
 (defn add-non-letters [schema]
 	(into {
 		\space \space, 
-		\. \., 
-		\, \,, 
-		\n \n, 
-		\t \t} schema))
+		\. \.,
+		\, \,,
+		\n \n,
+		\t \t
+			} schema))
 
 (defn skew [text steps]
   (let [t (mod steps (count text))]

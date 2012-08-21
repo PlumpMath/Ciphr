@@ -1,17 +1,13 @@
 (ns Ciphr.core
 	(:require 
-		[Ciphr.basics]
-		[Ciphr.schemas]
+		[Ciphr.schemas :as s]
 		[clojure.string]))
 
-(defn get-char [schema c]
-	(let [item (find schema c)]
-		(if (nil? item)
-			"?"
-			(val item))))
+(defn get-letter [schema letter]
+	(get schema letter "?"))
 
 (defn substitute [text schema]
-	(clojure.string/join (map (partial get-char schema) text)))
+	(clojure.string/join (map (partial get-letter schema) text)))
 
 (defn count-letter [text letter]
 	(count (filter #(= letter %1) text)))
@@ -24,7 +20,7 @@
 	(keys (sort-by val > (count-letters text alphabet))))
 
 (defn hypothesis-schema [text alphabet sorted-alphabet]
-	(Ciphr.schemas/add-non-letters (into {} (zipmap (letters-sorted-by-count text alphabet) sorted-alphabet))))
+	(s/add-non-letters (into {} (zipmap (letters-sorted-by-count text alphabet) sorted-alphabet))))
 
 (defn solve [text alphabet sorted-alphabet]
 	(let [schema (hypothesis-schema text alphabet sorted-alphabet)]
@@ -32,28 +28,24 @@
 
 (def help-text
 "Please supply a valid argument: 
- -e (caesar encrypt) [string] [steps]
- -d (caesar decrypt) [string] [steps]
- -solve [encrypted string]")
+ -en(crypt) [string] [steps]
+ -de(crypt) [string] [steps]
+ -solve [string]
+ -fen(crypt) [filename] [steps]
+ -fsolve [filename]")
 
 (defn -main [& args]
 	(let [flag (first args)]
 		(cond
-			; (= flag "-count")
-			; 	(println (count-letters (second args) Ciphr.schemas/normal-alphabet))
-			; (= flag "-sorted")
-			; 	(println (letters-sorted-by-count (second args) Ciphr.schemas/normal-alphabet))
-			; (= flag "-hypothesis")
-			; 	(println (hypothesis-schema (second args) Ciphr.schemas/normal-alphabet Ciphr.schemas/sorted-alphabet))
 			(= flag "-solve")
-				(println (solve (clojure.string/lower-case (second args)) Ciphr.schemas/normal-alphabet Ciphr.schemas/sorted-alphabet))
+				(println (solve (clojure.string/lower-case (second args)) s/normal-alphabet s/sorted-alphabet))
 			(= flag "-fsolve")
-				(println (solve (clojure.string/lower-case (slurp (second args))) Ciphr.schemas/normal-alphabet Ciphr.schemas/sorted-alphabet))
-			(= flag "-e") 
-				(println (substitute (clojure.string/lower-case (second args)) (Ciphr.schemas/caesar-schema (Integer/parseInt (nth args 2)))))
-			(= flag "-d")
-				(println (substitute (clojure.string/lower-case (second args)) (Ciphr.schemas/caesar-schema (- (Integer/parseInt (nth args 2))))))
-			(= flag "-fe")
-				(spit (str "encoded-" (second args)) (substitute (clojure.string/lower-case (slurp (second args))) (Ciphr.schemas/caesar-schema (Integer/parseInt (nth args 2)))))
+				(println (solve (clojure.string/lower-case (slurp (second args))) s/normal-alphabet s/sorted-alphabet))
+			(= flag "-en") 
+				(println (substitute (clojure.string/lower-case (second args)) (s/caesar-schema (Integer/parseInt (nth args 2)))))
+			(= flag "-de")
+				(println (substitute (clojure.string/lower-case (second args)) (s/caesar-schema (- (Integer/parseInt (nth args 2))))))
+			(= flag "-fen")
+				(spit (str "encoded-" (second args)) (substitute (clojure.string/lower-case (slurp (second args))) (s/caesar-schema (Integer/parseInt (nth args 2)))))
 			:else (println help-text))))
 
