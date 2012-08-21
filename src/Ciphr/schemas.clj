@@ -4,13 +4,9 @@
 (def sorted-alphabet "etaoinshrdlcumwfgypbvkjxqz")
 
 (defn add-non-letters [schema]
-	(into {
-		\space \space, 
-		\. \.,
-		\, \,,
-		\n \n,
-		\t \t
-			} schema))
+	(let [non-letters [\space \. \, \n \t]
+		  non-letter-map (zipmap non-letters non-letters)]
+			(into non-letter-map schema)))
 
 (defn skew [text steps]
   (let [t (mod steps (count text))]
@@ -20,5 +16,5 @@
 	([steps]
 		(caesar-schema normal-alphabet steps))
 	([alphabet steps]
-		(add-non-letters (into {} (map (fn [a b] [a b]) alphabet (skew alphabet steps))))))
+		(add-non-letters (zipmap alphabet (skew alphabet steps)))))
 
